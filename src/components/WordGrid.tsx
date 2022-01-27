@@ -5,8 +5,8 @@ import React from 'react';
 const styles = {
     letterBox: {
         border: 1,
-        height: "60px",
-        width: "60px",
+        height: "50px",
+        width: "50px",
         margin: "0.3em"
     },
     letterText: {

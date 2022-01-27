@@ -1,13 +1,16 @@
-import { Box, Button, Paper } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Button } from '@mui/material';
 import React from 'react';
 
 const styles = {
     letter: {
         margin: "0.2em",
         fontWeight: "bold",
-        minWidth: "0",
-        height: "55px"
+        minWidth: "0px",
+        flexGrow: 1,
+        padding: "0em",
+        height: "50px",
+        backgroundColor: "#7b7d7c",
+        color: "white"
     }
 }
 
@@ -21,8 +24,8 @@ const Keyboard = ({ onKeyboardInput }: { onKeyboardInput: (input: string) => voi
     const bottomRowLetters = [ENTER, "Z", "X", "C", "V", "B", "N", "M", DELETE]
 
 
-    return (<Box display="flex" justifyContent="center" flexDirection="column" alignItems="center">
-        <Box display="flex">
+    return (<Box display="flex" sx={{minWidth:"100%"}} justifyContent="center" flexDirection="column" alignItems="center">
+        <Box display="flex" sx={{minWidth:"100%"}}>
             {topRowLetters.map((letter) =>
                 <Button sx={styles.letter}
                     variant='contained'
@@ -32,7 +35,7 @@ const Keyboard = ({ onKeyboardInput }: { onKeyboardInput: (input: string) => voi
                 </Button>
             )}
         </Box>
-        <Box display="flex">
+        <Box display="flex" sx={{minWidth:"100%"}}>
             {midRowLetters.map((letter) => (
                 <Button sx={styles.letter}
                     variant='contained'
@@ -42,7 +45,7 @@ const Keyboard = ({ onKeyboardInput }: { onKeyboardInput: (input: string) => voi
                 </Button>
             ))}
         </Box>
-        <Box display="flex">
+        <Box display="flex" sx={{minWidth:"100%"}}>
             {bottomRowLetters.map((letter) => (
                 <Button sx={styles.letter}
                     variant='contained'

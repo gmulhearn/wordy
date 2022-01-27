@@ -4,19 +4,19 @@ import { makeStyles } from "@mui/styles"
 import { Route, Routes } from 'react-router';
 import Main from './main/main';
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   root: {
-    width: "550px",
-    height: "100vh"
+    width: "400px",
+    height: "95vh",
+    border: 1
   },
-}));
+};
 
 function App() {
-  const classes = useStyles()
 
   return (
     <Box display="flex" justifyContent="center">
-      <Box className={classes.root} display="flex" flexDirection="column">
+      <Box sx={styles.root} display="flex" flexDirection="column">
         <Routes>
           <Route path="/" element={<Main />} />
         </Routes>
