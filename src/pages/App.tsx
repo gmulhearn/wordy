@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box } from "@mui/material"
 import { Route, Routes } from 'react-router';
-import Main from './main/Main';
+import Main from './main/main';
 
 const styles = {
   root: {
     width: "400px",
     height: "95vh",
-    border: 1
+    // border: 1
   },
 };
 
