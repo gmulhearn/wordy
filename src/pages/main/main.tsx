@@ -23,7 +23,8 @@ const styles = {
 }
 
 const getTodaysWord = (): string => {
-    const word = words.at(Math.floor(Math.random() * words.length-1))  || "UNDEF"
+    console.log(words)
+    const word = words[Math.floor(Math.random() * words.length-1)]  || "UNDEF"
     return word.toUpperCase()
 }
 
