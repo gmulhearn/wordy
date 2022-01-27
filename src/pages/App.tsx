@@ -6,7 +6,7 @@ import Main from './main/main';
 const styles = {
   root: {
     width: "400px",
-    height: "95vh",
+    minHeight: "90vh",
     // border: 1
   },
 };
@@ -14,7 +14,7 @@ const styles = {
 function App() {
 
   return (
-    <Box display="flex" justifyContent="center">
+    <Box sx={{ minHeight: "100%" }} display="flex" justifyContent="center">
       <Box sx={styles.root} display="flex" flexDirection="column">
         <Routes>
           <Route path="/" element={<Main />} />
