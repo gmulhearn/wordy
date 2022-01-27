@@ -1,8 +1,7 @@
 import React from 'react';
 import { Box } from "@mui/material"
-import { makeStyles } from "@mui/styles"
 import { Route, Routes } from 'react-router';
-import Main from './main/main';
+import Main from './main/Main';
 
 const styles = {
   root: {
