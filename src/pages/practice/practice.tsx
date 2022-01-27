@@ -1,10 +1,9 @@
-import { Box, Button, Dialog, Grid, IconButton, Paper, Typography } from '@mui/material';
+import { Box, Button, Dialog, Grid, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import Keyboard from '../../components/Keyboard';
 import WordGrid from '../../components/WordGrid';
 import { emptyGrid, LetterGridProcessor } from '../../core/LetterGridCore';
 import words from '../../res/5letterwords.json'
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 const styles = {
     title: {
