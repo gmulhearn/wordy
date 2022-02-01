@@ -29,11 +29,15 @@ const cloneMatrix = (matrix: any[][]): any[][] => {
 
 export class LetterGridProcessor {
     letterPosition: { x: number, y: number } = { x: 0, y: 0 }
-    correctWord: string = "DUMMY"
     currentGrid: LetterBox[][] = emptyGrid
+    letterGuesses: LetterBox[] = []
 
-    constructor(correctWord: string) {
+    correctWord
+    setLetterGuesses
+
+    constructor(correctWord: string, setLetterGuesses: React.Dispatch<React.SetStateAction<LetterBox[]>>) {
         this.correctWord = correctWord
+        this.setLetterGuesses = setLetterGuesses
     }
 
     calculateLetterBoxState = (index: number, letterBox: LetterBox): LetterBox => {
@@ -56,12 +60,15 @@ export class LetterGridProcessor {
             if (this.letterPosition.x == WIDTH) {
                 // process here
                 const row = this.currentGrid[this.letterPosition.y]
+                // check if valid word
                 if (words.includes(row.map((i) => (i.letter)).join("").toLowerCase())) {
                     const newRow: LetterBox[] = row.map((letterBox, i) => (
                         this.calculateLetterBoxState(i, letterBox)
                     ))
+                    this.letterGuesses = this.letterGuesses.concat(newRow)
+                    this.setLetterGuesses(this.letterGuesses)
                     this.currentGrid[this.letterPosition.y] = newRow
-    
+
                     this.letterPosition.x = 0
                     this.letterPosition.y += 1
                 } else {

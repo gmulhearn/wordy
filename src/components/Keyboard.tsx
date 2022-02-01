@@ -1,5 +1,7 @@
 import { Box, Button } from '@mui/material';
 import React, { useCallback, useEffect } from 'react';
+import { stateToColor } from '../core/miscUtil';
+import { LetterBox, LetterState } from './WordGrid';
 
 const styles = {
     letter: {
@@ -19,7 +21,7 @@ export const DELETE = "DEL"
 
 const VALID_INPUT = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ENTER, DELETE]
 
-const Keyboard = ({ onKeyboardInput }: { onKeyboardInput: (input: string) => void }) => {
+const Keyboard = ({ onKeyboardInput, letterStates }: { onKeyboardInput: (input: string) => void, letterStates: LetterBox[] }) => {
 
     const topRowLetters = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
     const midRowLetters = ["A", "S", "D", "F", "G", "H", "J", "K", "L"]
@@ -45,10 +47,39 @@ const Keyboard = ({ onKeyboardInput }: { onKeyboardInput: (input: string) => voi
     }, []);
 
 
+    // useEffect(() => {
+    //     console.log(letterStates)
+  
+    //   }, [letterStates]);
+
+    const getLetterStyle = (letter: string): any => {
+        const newStyle = JSON.parse(JSON.stringify(styles.letter))
+        
+        let bg = "#7b7d7c"
+        
+        const letterMatches = letterStates.filter((l: LetterBox) => (l.letter == letter))
+        if (letterMatches.length > 0) {
+            if (letterMatches.filter((l: LetterBox) => (l.state == LetterState.CORRECT)).length > 0) {
+                bg = stateToColor(LetterState.CORRECT)
+            } else if (letterMatches.filter((l: LetterBox) => (l.state == LetterState.NEARLY)).length > 0) {
+                bg = stateToColor(LetterState.NEARLY)
+            } else if (letterMatches.filter((l: LetterBox) => (l.state == LetterState.INCORRECT)).length > 0) {
+                bg = stateToColor(LetterState.INCORRECT)
+            }
+        }
+
+        newStyle.backgroundColor = bg
+
+        console.log(newStyle.backgroundColor)
+
+        return newStyle
+    }
+
+
     return (<Box display="flex" sx={{ minWidth: "100%" }} justifyContent="center" flexDirection="column" alignItems="center">
         <Box display="flex" sx={{ minWidth: "100%" }}>
             {topRowLetters.map((letter) =>
-                <Button sx={styles.letter}
+                <Button sx={getLetterStyle(letter)}
                     variant='contained'
                     key={letter}
                     onClick={() => { onKeyboardInput(letter) }}>
@@ -58,7 +89,7 @@ const Keyboard = ({ onKeyboardInput }: { onKeyboardInput: (input: string) => voi
         </Box>
         <Box display="flex" sx={{ minWidth: "100%" }}>
             {midRowLetters.map((letter) => (
-                <Button sx={styles.letter}
+                <Button sx={getLetterStyle(letter)}
                     variant='contained'
                     key={letter}
                     onClick={() => { onKeyboardInput(letter) }}>
@@ -68,7 +99,7 @@ const Keyboard = ({ onKeyboardInput }: { onKeyboardInput: (input: string) => voi
         </Box>
         <Box display="flex" sx={{ minWidth: "100%" }}>
             {bottomRowLetters.map((letter) => (
-                <Button sx={styles.letter}
+                <Button sx={getLetterStyle(letter)}
                     variant='contained'
                     key={letter}
                     onClick={() => { onKeyboardInput(letter) }}>

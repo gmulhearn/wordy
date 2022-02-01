@@ -2,7 +2,7 @@ import { Box, Grid, Paper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import Keyboard from '../../components/Keyboard';
-import WordGrid, { LetterState } from '../../components/WordGrid';
+import WordGrid, { LetterBox, LetterState } from '../../components/WordGrid';
 import { emptyGrid, LetterGridProcessor } from '../../core/LetterGridCore';
 import words from '../../res/5letterwords.json'
 
@@ -30,12 +30,11 @@ const getTodaysWord = (): string => {
 const Main = () => {
 
     const [letterGrid, setLetterGrid] = useState(emptyGrid);
+    const [letterGuesses, setLetterGuesses] = useState<LetterBox[]>([])
 
     const todaysWord = getTodaysWord()
-    const [letterGridProcessor, setLetterGridProcessor] = useState(new LetterGridProcessor(todaysWord))
+    const [letterGridProcessor, setLetterGridProcessor] = useState(new LetterGridProcessor(todaysWord, setLetterGuesses))
 
-
-    
     const handleKeyboardInput = (input: string) => {
         const newGrid = letterGridProcessor.processInput(input)
         setLetterGrid(newGrid)
@@ -47,7 +46,7 @@ const Main = () => {
                 <WordGrid letterGrid={letterGrid} />
             </Box>
             <Box sx={styles.keyboard}>
-                <Keyboard onKeyboardInput={handleKeyboardInput} />
+                <Keyboard onKeyboardInput={handleKeyboardInput} letterStates={letterGuesses} />
             </Box>
         </Box>
 

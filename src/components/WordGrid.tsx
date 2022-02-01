@@ -1,6 +1,8 @@
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import { stateToColor } from '../core/miscUtil';
+import { wordleColours } from '../theme';
 
 const styles = {
     letterBox: {
@@ -27,20 +29,8 @@ export enum LetterState {
     CORRECT,
 }
 
-const WordGrid = ({ letterGrid }: { letterGrid: LetterBox[][] }) => {
 
-    const stateToColor = (state: LetterState): string => {
-        switch (state) {
-            case LetterState.CORRECT:
-                return "#618B55"
-            case LetterState.INCORRECT:
-                return "#3A3A3B"
-            case LetterState.NEARLY:
-                return "#B29F4D"
-            default:
-                return "none"
-        }
-    }
+const WordGrid = ({ letterGrid }: { letterGrid: LetterBox[][] }) => {
 
     const getLetterBoxStyles = (letterBox: LetterBox): any => {
         const style = JSON.parse(JSON.stringify(styles.letterBox))
