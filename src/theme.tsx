@@ -17,8 +17,8 @@ export const wordleColours = {
     
   },
   colourBlind: {
-    correct: "",
-    nearly: ""
+    correct: "#E5804A",
+    nearly: "#93BEF4"
   }
 }
 

@@ -30,11 +30,11 @@ export enum LetterState {
 }
 
 
-const WordGrid = ({ letterGrid }: { letterGrid: LetterBox[][] }) => {
+const WordGrid = ({ letterGrid, colourBlind }: { letterGrid: LetterBox[][], colourBlind: boolean }) => {
 
     const getLetterBoxStyles = (letterBox: LetterBox): any => {
         const style = JSON.parse(JSON.stringify(styles.letterBox))
-        style.backgroundColor = stateToColor(letterBox.state)
+        style.backgroundColor = stateToColor(letterBox.state, colourBlind)
         return style
     }
 

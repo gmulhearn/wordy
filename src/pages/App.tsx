@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { AppBar, Box, Button, Typography } from "@mui/material"
+import React, { useCallback, useState } from 'react';
+import { AppBar, Box, Button, Switch, Typography } from "@mui/material"
 import { Route, Routes, useNavigate } from 'react-router';
 import Main from './main/main';
 import Practice from './practice/practice';
@@ -22,6 +22,8 @@ function App() {
   const navPractice = useCallback(() => navigate('/practice', { replace: true }), [navigate]);
   const navLeaderboard = useCallback(() => navigate('/leaderboard', { replace: true }), [navigate]);
 
+  const [colourBlind, setColourBlind] = useState(false);
+
 
   return (
     <Box sx={{ minHeight: "100%" }} display="flex" justifyContent="center">
@@ -30,7 +32,7 @@ function App() {
           <Typography sx={{ fontWeight: "bold", fontSize: "24px" }}>
             WORDLE2
           </Typography>
-          <Box display="flex">
+          <Box display="flex" alignItems="center">
             <Button onClick={navHome}>
               <HomeIcon />
             </Button>
@@ -40,6 +42,7 @@ function App() {
             <Button onClick={navLeaderboard}>
               <LeaderboardIcon />
             </Button>
+            <Switch size="small" onChange={() => {setColourBlind(!colourBlind)}} />
           </Box>
 
         </Box>
@@ -47,8 +50,8 @@ function App() {
       </AppBar>
       <Box sx={styles.root} display="flex" flexDirection="column">
         <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/practice" element={<Practice />} />
+          <Route path="/" element={<Main colourBlind={colourBlind} />} />
+          <Route path="/practice" element={<Practice colourBlind={colourBlind} />} />
         </Routes>
       </Box>
     </Box>

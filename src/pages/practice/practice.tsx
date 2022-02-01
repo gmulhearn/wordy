@@ -26,7 +26,7 @@ const getTodaysWord = (): string => {
     return word.toUpperCase()
 }
 
-const Practice = () => {
+const Practice = ({colourBlind} : {colourBlind: boolean}) => {
 
     const [letterGrid, setLetterGrid] = useState(emptyGrid);
     const [letterGuesses, setLetterGuesses] = useState<LetterBox[]>([])
@@ -64,10 +64,10 @@ const Practice = () => {
             </Box>
 
             <Box sx={styles.main} display="flex" alignItems="center" justifyContent="center">
-                <WordGrid letterGrid={letterGrid} />
+                <WordGrid letterGrid={letterGrid} colourBlind={colourBlind} />
             </Box>
             <Box sx={styles.keyboard}>
-                <Keyboard onKeyboardInput={handleKeyboardInput} letterStates={letterGuesses} />
+                <Keyboard onKeyboardInput={handleKeyboardInput} letterStates={letterGuesses} colourBlind={colourBlind} />
             </Box>
         </Box>
 
