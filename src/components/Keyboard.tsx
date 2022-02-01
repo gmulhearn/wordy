@@ -67,11 +67,7 @@ const Keyboard = ({ onKeyboardInput, letterStates }: { onKeyboardInput: (input: 
                 bg = stateToColor(LetterState.INCORRECT)
             }
         }
-
         newStyle.backgroundColor = bg
-
-        console.log(newStyle.backgroundColor)
-
         return newStyle
     }
 

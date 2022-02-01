@@ -1,9 +1,10 @@
-import { Box, Button, Dialog, Grid, Typography } from '@mui/material';
+import { Box, Button, Dialog, Grid, IconButton, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Keyboard from '../../components/Keyboard';
 import WordGrid, { LetterBox } from '../../components/WordGrid';
 import { emptyGrid, LetterGridProcessor } from '../../core/LetterGridCore';
 import words from '../../res/5letterwords.json'
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const styles = {
     title: {
@@ -51,9 +52,15 @@ const Practice = () => {
                 <Typography >
                     Practice Mode
                 </Typography>
-                <Button variant="outlined" onClick={() => { setRevealWordOpen(true) }} >
+                <Box display="flex">
+                     <Button variant="outlined" onClick={() => { setRevealWordOpen(true) }} >
                     Reveal Word
                 </Button>
+                <IconButton sx={{marginLeft:"0.2em"}} onClick={() => {window.location.reload()}}>
+                    <RefreshIcon color="primary" />
+                </IconButton>
+                </Box>
+               
             </Box>
 
             <Box sx={styles.main} display="flex" alignItems="center" justifyContent="center">
