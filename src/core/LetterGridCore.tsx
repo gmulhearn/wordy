@@ -1,5 +1,6 @@
 import { DELETE, ENTER } from "../components/Keyboard"
 import { LetterBox, LetterState } from "../components/WordGrid"
+import words from '../res/5letterwords.json'
 
 const WIDTH = 5
 const HEIGHT = 6
@@ -28,7 +29,7 @@ const cloneMatrix = (matrix: any[][]): any[][] => {
 
 export class LetterGridProcessor {
     letterPosition: { x: number, y: number } = { x: 0, y: 0 }
-    correctWord: string = "dummy"
+    correctWord: string = "DUMMY"
     currentGrid: LetterBox[][] = emptyGrid
 
     constructor(correctWord: string) {
@@ -55,13 +56,17 @@ export class LetterGridProcessor {
             if (this.letterPosition.x == WIDTH) {
                 // process here
                 const row = this.currentGrid[this.letterPosition.y]
-                const newRow: LetterBox[] = row.map((letterBox, i) => (
-                    this.calculateLetterBoxState(i, letterBox)
-                ))
-                this.currentGrid[this.letterPosition.y] = newRow
-
-                this.letterPosition.x = 0
-                this.letterPosition.y += 1
+                if (words.includes(row.map((i) => (i.letter)).join("").toLowerCase())) {
+                    const newRow: LetterBox[] = row.map((letterBox, i) => (
+                        this.calculateLetterBoxState(i, letterBox)
+                    ))
+                    this.currentGrid[this.letterPosition.y] = newRow
+    
+                    this.letterPosition.x = 0
+                    this.letterPosition.y += 1
+                } else {
+                    console.log("Invalid word")
+                }
             }
         } else if (input == DELETE) {
             if (this.letterPosition.x != 0) {
