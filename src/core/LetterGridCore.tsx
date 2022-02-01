@@ -77,8 +77,6 @@ export class LetterGridProcessor {
             this.currentGrid[this.letterPosition.y][this.letterPosition.x] = { letter: input, state: LetterState.NONE }
             this.letterPosition.x += 1
         }
-        console.log(this.letterPosition)
-        console.log(this.currentGrid)
 
         return cloneMatrix(this.currentGrid)
     }
