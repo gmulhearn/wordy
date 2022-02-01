@@ -21,7 +21,6 @@ const styles = {
 }
 
 const getTodaysWord = (): string => {
-    console.log(words)
     const word = words[Math.floor(Math.random() * words.length-1)]  || "UNDEF"
     return word.toUpperCase()
 }
@@ -36,7 +35,6 @@ const Practice = () => {
     const [letterGridProcessor, setLetterGridProcessor] = useState(new LetterGridProcessor(todaysWord))
 
     const handleKeyboardInput = (input: string) => {
-        console.log(input)
         const newGrid = letterGridProcessor.processInput(input)
         setLetterGrid(newGrid)
     }
