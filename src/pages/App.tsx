@@ -6,6 +6,7 @@ import Practice from './practice/practice';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import HomeIcon from '@mui/icons-material/Home';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import Leaderboard from './leaderboard/Leaderboard';
 
 const styles = {
   root: {
@@ -52,6 +53,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main colourBlind={colourBlind} />} />
           <Route path="/practice" element={<Practice colourBlind={colourBlind} />} />
+          <Route path="/leaderboard" element={<Leaderboard colourBlind={colourBlind} />} />
         </Routes>
       </Box>
     </Box>

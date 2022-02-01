@@ -49,7 +49,7 @@ const Practice = ({colourBlind} : {colourBlind: boolean}) => {
                 </Typography>
             </Dialog>Ï
             <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" sx={{ marginTop: "4em", fontWeight: "bold" }}>
-                <Typography >
+                <Typography variant="h5" >
                     Practice Mode
                 </Typography>
                 <Box display="flex">
