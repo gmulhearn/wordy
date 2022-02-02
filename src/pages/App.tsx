@@ -27,8 +27,8 @@ function App() {
 
 
   return (
-    <Box sx={{ minHeight: "100%" }} display="flex" justifyContent="center">
-      <AppBar>
+    <>
+    <AppBar position='sticky'>
         <Box display="flex" justifyContent="space-between" sx={{ padding: "0.5em" }} >
           <Typography sx={{ fontWeight: "bold", fontSize: "24px" }}>
             WORDLE2
@@ -49,6 +49,7 @@ function App() {
         </Box>
 
       </AppBar>
+    <Box display="flex" justifyContent="center">
       <Box sx={styles.root} display="flex" flexDirection="column">
         <Routes>
           <Route path="/" element={<Main colourBlind={colourBlind} />} />
@@ -57,7 +58,7 @@ function App() {
         </Routes>
       </Box>
     </Box>
-
+</>
   );
 }
 
