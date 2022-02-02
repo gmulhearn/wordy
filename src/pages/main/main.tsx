@@ -6,7 +6,6 @@ import GameBoard from '../../components/GameBoard';
 const getTodaysWord = (): string => {
     const randNum = randomseed.create(Date().split(" ").slice(1,4).join("")).random()
     const word = words[Math.floor(randNum * words.length-1)]  || "UNDEF"
-    console.log(word)
     return word.toUpperCase()
 }
 
