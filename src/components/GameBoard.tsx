@@ -11,7 +11,7 @@ const styles = {
     keyboard: {},
 }
 
-const GameBoard = ({ colourBlind, correctWord, isPractice }: { colourBlind: boolean, correctWord: string, isPractice: boolean }) => {
+const GameBoard = ({ colourBlind, correctWord }: { colourBlind: boolean, correctWord: string }) => {
 
     const [letterGrid, setLetterGrid] = useState(emptyGrid);
     const [letterGuesses, setLetterGuesses] = useState<LetterBox[]>([])

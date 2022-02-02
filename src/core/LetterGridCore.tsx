@@ -1,6 +1,6 @@
 import { DELETE, ENTER } from "../components/Keyboard"
 import { LetterBox, LetterState } from "../components/WordGrid"
-import words from '../res/5letterwords.json'
+import allowedWords from '../res/5letterallowedwords.json'
 
 const WIDTH = 5
 const HEIGHT = 6
@@ -15,11 +15,6 @@ export const emptyGrid: LetterBox[][] = [
     Array(WIDTH).fill(emptyLetterBox),
     Array(WIDTH).fill(emptyLetterBox),
 ]
-
-// const putItemInMatrixPosition = (x: number, y: number, item: any, matrix: any[][]): any[][] => {
-
-
-// }
 
 const cloneMatrix = (matrix: any[][]): any[][] => {
     return matrix.map(function (arr) {
@@ -61,7 +56,7 @@ export class LetterGridProcessor {
                 // process here
                 const row = this.currentGrid[this.letterPosition.y]
                 // check if valid word
-                if (words.includes(row.map((i) => (i.letter)).join("").toLowerCase())) {
+                if (allowedWords.includes(row.map((i) => (i.letter)).join("").toLowerCase())) {
                     const newRow: LetterBox[] = row.map((letterBox, i) => (
                         this.calculateLetterBoxState(i, letterBox)
                     ))

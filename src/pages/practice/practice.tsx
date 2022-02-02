@@ -40,7 +40,7 @@ const Practice = ({ colourBlind }: { colourBlind: boolean }) => {
                 </Box>
 
             </Box>
-            <GameBoard colourBlind={colourBlind} correctWord={correctWord} isPractice={true} />
+            <GameBoard colourBlind={colourBlind} correctWord={correctWord} />
         </Box>
 
     );
