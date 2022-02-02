@@ -13,10 +13,11 @@ const Practice = ({ colourBlind }: { colourBlind: boolean }) => {
 
     const [revealWordOpen, setRevealWordOpen] = useState(false);
 
-    const [correctWord, setCorrectWord] = useState("DUMMY")
+    const word = getWord()
+    const [correctWord, setCorrectWord] = useState(word)
 
     useEffect(() => {
-        setCorrectWord(getWord())
+        setCorrectWord(word)
     }, []);
 
     return (

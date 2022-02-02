@@ -1,6 +1,6 @@
 import { Box } from '@mui/system';
-import React, { useState } from 'react';
-import { emptyGrid, LetterGridProcessor } from '../core/LetterGridCore';
+import React, { useEffect, useState } from 'react';
+import { getEmptyGrid, LetterGridProcessor } from '../core/LetterGridCore';
 import Keyboard from './Keyboard';
 import WordGrid, { LetterBox } from './WordGrid';
 
@@ -13,7 +13,7 @@ const styles = {
 
 const GameBoard = ({ colourBlind, correctWord }: { colourBlind: boolean, correctWord: string }) => {
 
-    const [letterGrid, setLetterGrid] = useState(emptyGrid);
+    const [letterGrid, setLetterGrid] = useState(getEmptyGrid());
     const [letterGuesses, setLetterGuesses] = useState<LetterBox[]>([])
 
     const [letterGridProcessor, setLetterGridProcessor] = useState(new LetterGridProcessor(correctWord, setLetterGuesses))
@@ -22,8 +22,7 @@ const GameBoard = ({ colourBlind, correctWord }: { colourBlind: boolean, correct
         const newGrid = letterGridProcessor.processInput(input)
         setLetterGrid(newGrid)
     }
-
-
+    
     return (
         <Box display="flex" justifyContent="space-between" flexDirection="column" sx={{ minHeight: "100%" }}>
             <Box sx={styles.main} display="flex" alignItems="center" justifyContent="center">
