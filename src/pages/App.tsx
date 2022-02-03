@@ -11,7 +11,7 @@ import Leaderboard from './leaderboard/Leaderboard';
 const styles = {
   root: {
     width: "400px",
-    minHeight: "85vh",
+    // minHeight: "85vh",
     // border: 1
   },
 };

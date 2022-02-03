@@ -6,9 +6,13 @@ import WordGrid, { LetterBox } from './WordGrid';
 
 const styles = {
     main: {
+        
         // border: 1
     },
     keyboard: {
+        position: "absolute",
+        minWidth: "400px",
+        bottom: 0
         // border: 1
     },
 }
@@ -26,7 +30,7 @@ const GameBoard = ({ colourBlind, correctWord, onWordFound }: { colourBlind: boo
     }
 
     return (
-        <Box display="flex" justifyContent="space-between" flexDirection="column" sx={{ minHeight: "100%"}}>
+        <Box display="flex" justifyContent="space-between" flexDirection="column">
             <Box sx={styles.main} display="flex" alignItems="center" justifyContent="center">
                 <WordGrid letterGrid={letterGrid} colourBlind={colourBlind} />
             </Box>

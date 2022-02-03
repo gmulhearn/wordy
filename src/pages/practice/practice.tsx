@@ -25,24 +25,22 @@ const Practice = ({ colourBlind }: { colourBlind: boolean }) => {
     }
 
     return (
-        <Box display="flex" flexDirection="column" marginTop="1em">
+        <Box display="flex" flexDirection="column" marginTop="0.5em">
             <Dialog open={revealWordOpen} onClose={() => { setRevealWordOpen(false) }}>
                 <Typography sx={{ paddingInline: "2em", paddingBlock: "1em" }}>
                     {correctWord}
                 </Typography>
             </Dialog>
-            <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" sx={{ fontWeight: "bold" }}>
-                <Typography variant="h5" >
-                    Practice Mode
+            <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row" sx={{ fontWeight: "bold" }}>
+                <Typography variant="h5" sx={{marginRight: "1em"}} >
+                    Practice
                 </Typography>
-                <Box display="flex">
-                    <Button variant="outlined" onClick={() => { setRevealWordOpen(true) }} >
-                        Reveal Word
-                    </Button>
-                    <IconButton sx={{ marginLeft: "0.2em" }} onClick={() => { window.location.reload() }}>
-                        <RefreshIcon color="primary" />
-                    </IconButton>
-                </Box>
+                <Button variant="outlined" onClick={() => { setRevealWordOpen(true) }} >
+                    Reveal Word
+                </Button>
+                <IconButton sx={{ marginLeft: "0.2em" }} onClick={() => { window.location.reload() }}>
+                    <RefreshIcon color="primary" />
+                </IconButton>
 
             </Box>
             <GameBoard colourBlind={colourBlind} correctWord={correctWord} onWordFound={onWordFound} />
