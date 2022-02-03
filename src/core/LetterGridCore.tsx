@@ -22,7 +22,6 @@ export const emptyGrid: LetterBox[][] = [
 const emptyGridJSON: string = JSON.stringify(emptyGrid)
 
 export const getEmptyGrid = (): LetterBox[][] => {
-    console.log(emptyGridJSON)
     const a = JSON.parse(emptyGridJSON)
     return a
 }
@@ -33,17 +32,35 @@ const cloneMatrix = (matrix: any[][]): any[][] => {
     });
 }
 
+export const gridToText = (grid: LetterBox[][]): string => {
+    let text = `Wordle2 ${Date().split(" ").slice(1, 4).join(" ")}\n\n`
+
+    text += grid.map((row) => (
+        row.map((lb) => (
+            lb.state == LetterState.CORRECT ? "🟩" : (
+                lb.state == LetterState.NEARLY ? "🟨" : (
+                    lb.state == LetterState.INCORRECT ? "⬜" : ""
+                )
+            ))).join("")
+    )).join("\n")
+
+    return text
+}
+
 export class LetterGridProcessor {
     letterPosition: { x: number, y: number } = { x: 0, y: 0 }
     currentGrid: LetterBox[][] = getEmptyGrid()
     letterGuesses: LetterBox[] = []
+    foundWord: boolean = false
 
     correctWord
     setLetterGuesses
+    onWordFound
 
-    constructor(correctWord: string, setLetterGuesses: React.Dispatch<React.SetStateAction<LetterBox[]>>) {
+    constructor(correctWord: string, setLetterGuesses: React.Dispatch<React.SetStateAction<LetterBox[]>>, onWordFound: (wordGrid: LetterBox[][]) => void) {
         this.correctWord = correctWord
         this.setLetterGuesses = setLetterGuesses
+        this.onWordFound = onWordFound
     }
 
     calculateLetterBoxState = (index: number, letterBox: LetterBox): LetterBox => {
@@ -57,6 +74,9 @@ export class LetterGridProcessor {
     }
 
     processInput = (input: string): LetterBox[][] => {
+        if (this.foundWord) {
+            return this.currentGrid
+        }
         if (this.letterPosition.x == WIDTH && input != ENTER && input != DELETE) {
             // err
             throw new Error("");
@@ -77,6 +97,11 @@ export class LetterGridProcessor {
 
                     this.letterPosition.x = 0
                     this.letterPosition.y += 1
+
+                    if (newRow.length == newRow.filter((i) => i.state == LetterState.CORRECT).length) {
+                        this.foundWord = true
+                        this.onWordFound(this.currentGrid)
+                    }
                 } else {
                     console.log("Invalid word")
                 }

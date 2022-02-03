@@ -11,18 +11,18 @@ const styles = {
     keyboard: {},
 }
 
-const GameBoard = ({ colourBlind, correctWord }: { colourBlind: boolean, correctWord: string }) => {
+const GameBoard = ({ colourBlind, correctWord, onWordFound }: { colourBlind: boolean, correctWord: string, onWordFound: (letterGrid: LetterBox[][]) => void }) => {
 
     const [letterGrid, setLetterGrid] = useState(getEmptyGrid());
     const [letterGuesses, setLetterGuesses] = useState<LetterBox[]>([])
 
-    const [letterGridProcessor, setLetterGridProcessor] = useState(new LetterGridProcessor(correctWord, setLetterGuesses))
+    const [letterGridProcessor, setLetterGridProcessor] = useState(new LetterGridProcessor(correctWord, setLetterGuesses, onWordFound))
 
     const handleKeyboardInput = (input: string) => {
         const newGrid = letterGridProcessor.processInput(input)
         setLetterGrid(newGrid)
     }
-    
+
     return (
         <Box display="flex" justifyContent="space-between" flexDirection="column" sx={{ minHeight: "100%" }}>
             <Box sx={styles.main} display="flex" alignItems="center" justifyContent="center">

@@ -20,6 +20,10 @@ const Practice = ({ colourBlind }: { colourBlind: boolean }) => {
         setCorrectWord(word)
     }, []);
 
+    const onWordFound = () => {
+        console.log("FOUND!")
+    }
+
     return (
         <Box display="flex" flexDirection="column" marginTop="1em">
             <Dialog open={revealWordOpen} onClose={() => { setRevealWordOpen(false) }}>
@@ -41,7 +45,7 @@ const Practice = ({ colourBlind }: { colourBlind: boolean }) => {
                 </Box>
 
             </Box>
-            <GameBoard colourBlind={colourBlind} correctWord={correctWord} />
+            <GameBoard colourBlind={colourBlind} correctWord={correctWord} onWordFound={onWordFound} />
         </Box>
 
     );
