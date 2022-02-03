@@ -2,7 +2,6 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { stateToColor } from '../core/miscUtil';
-import { wordleColours } from '../theme';
 
 const styles = {
     letterBox: {
