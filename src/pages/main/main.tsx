@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import words from '../../res/5letterwords.json'
 import randomseed from 'random-seed'
 import GameBoard from '../../components/GameBoard';
@@ -20,12 +20,22 @@ const Main = ({ colourBlind }: { colourBlind: boolean }) => {
     const [winOpen, setWinOpen] = useState(false);
     const [resultText, setResultText] = useState("bruh");
     const [resultCopied, setResultCopied] = useState(false)
+    const [winningGrid, setWinningGrid] = useState<LetterBox[][]>([[]])
 
     const onWordFound = (wordGrid: LetterBox[][]) => {
         setWordFound(true)
         setWinOpen(true)
-        setResultText(gridToText(wordGrid))
+        setWinningGrid(wordGrid)
+        setResultText(gridToText(wordGrid, colourBlind))
     }
+
+    useEffect(() => {
+      if (wordFound) {
+          setResultText(gridToText(winningGrid, colourBlind))
+      }
+    
+    }, [colourBlind]);
+    
 
     return (
         <>

@@ -32,17 +32,18 @@ const cloneMatrix = (matrix: any[][]): any[][] => {
     });
 }
 
-export const gridToText = (grid: LetterBox[][]): string => {
+export const gridToText = (grid: LetterBox[][], colourBlind: boolean): string => {
     let text = `Wordle2\n${Date().split(" ").slice(1, 4).join(" ")}\n\n`
-
     text += grid.map((row) => (
         row.map((lb) => (
-            lb.state == LetterState.CORRECT ? "🟩" : (
-                lb.state == LetterState.NEARLY ? "🟨" : (
+            lb.state == LetterState.CORRECT ? (colourBlind ? "🟧" : "🟩") : (
+                lb.state == LetterState.NEARLY ? (colourBlind ? "🟦" : "🟨") : (
                     lb.state == LetterState.INCORRECT ? "⬜" : ""
                 )
             ))).join("")
     )).join("\n")
+
+    text += `Play me at: ${window.location.toString()}`
 
     return text
 }
