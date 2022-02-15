@@ -1,17 +1,18 @@
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getEmptyGrid, LetterGridProcessor } from '../core/LetterGridCore';
 import Keyboard from './Keyboard';
 import WordGrid, { LetterBox } from './WordGrid';
 
 const styles = {
     main: {
-        
         // border: 1
     },
     keyboard: {
         position: "absolute",
-        minWidth: "400px",
+        minWidth: "250px",
+        width: "100%",
+        maxWidth: "450px",
         bottom: 0
         // border: 1
     },
@@ -30,8 +31,8 @@ const GameBoard = ({ colourBlind, correctWord, onWordFound }: { colourBlind: boo
     }
 
     return (
-        <Box display="flex" justifyContent="space-between" flexDirection="column">
-            <Box sx={styles.main} display="flex" alignItems="center" justifyContent="center">
+        <Box display="flex" justifyContent="space-between" flexDirection="column" alignItems="center">
+            <Box sx={styles.main} >
                 <WordGrid letterGrid={letterGrid} colourBlind={colourBlind} />
             </Box>
             <Box sx={styles.keyboard}>

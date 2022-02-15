@@ -1,9 +1,9 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, SxProps, Theme } from '@mui/material';
 import React, { useCallback, useEffect } from 'react';
 import { stateToColor } from '../core/miscUtil';
 import { LetterBox, LetterState } from './WordGrid';
 
-const styles = {
+const styles: { letter: SxProps<Theme> } = {
     letter: {
         margin: "0.2em",
         fontWeight: "bold",
@@ -45,12 +45,6 @@ const Keyboard = ({ onKeyboardInput, letterStates, colourBlind }: { onKeyboardIn
             document.removeEventListener("keydown", keyPressListener, false);
         };
     }, []);
-
-
-    // useEffect(() => {
-    //     console.log(letterStates)
-  
-    //   }, [letterStates]);
 
     const getLetterStyle = (letter: string): any => {
         const newStyle = JSON.parse(JSON.stringify(styles.letter))

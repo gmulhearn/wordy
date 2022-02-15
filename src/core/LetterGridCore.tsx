@@ -33,7 +33,7 @@ const cloneMatrix = (matrix: any[][]): any[][] => {
 }
 
 export const gridToText = (grid: LetterBox[][], colourBlind: boolean): string => {
-    let text = `Wordle2\n${Date().split(" ").slice(1, 4).join(" ")}\n\n`
+    let text = `Wordy\n${Date().split(" ").slice(1, 4).join(" ")}\n\n`
     text += grid.map((row) => (
         row.map((lb) => (
             lb.state == LetterState.CORRECT ? (colourBlind ? "🟧" : "🟩") : (

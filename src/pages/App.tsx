@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { AppBar, Box, Button, Switch, Typography } from "@mui/material"
+import { AppBar, Box, Button, Switch, Toolbar, Typography } from "@mui/material"
 import { Route, Routes, useNavigate } from 'react-router';
 import Main from './main/main';
 import Practice from './practice/practice';
@@ -28,37 +28,35 @@ function App() {
 
   return (
     <>
-    <AppBar position='sticky'>
-        <Box display="flex" justifyContent="space-between" sx={{ padding: "0.5em" }} >
-          <Typography sx={{ fontWeight: "bold", fontSize: "24px" }}>
-            WORDLE2
-          </Typography>
-          <Box display="flex" alignItems="center">
-            <Button onClick={navHome}>
-              <HomeIcon />
-            </Button>
-            <Button onClick={navPractice}>
-              <FitnessCenterIcon />
-            </Button>
-            <Button onClick={navLeaderboard}>
-              <LeaderboardIcon />
-            </Button>
-            <Switch size="small" onChange={() => {setColourBlind(!colourBlind)}} />
-          </Box>
-
-        </Box>
-
+      <AppBar position='sticky'>
+        <Toolbar>
+            <Typography sx={{ fontWeight: "bold", fontSize: "24px", flexGrow: 1 }}>
+              WORDY
+            </Typography>
+            <Box display="flex" alignItems="center">
+              <Button onClick={navHome} sx={{minWidth: "0px"}}>
+                <HomeIcon />
+              </Button>
+              <Button onClick={navPractice} sx={{minWidth: "0px"}}>
+                <FitnessCenterIcon />
+              </Button>
+              <Button onClick={navLeaderboard} sx={{minWidth: "0px"}}>
+                <LeaderboardIcon />
+              </Button>
+              <Switch size="small" onChange={() => { setColourBlind(!colourBlind) }} />
+            </Box>
+        </Toolbar>
       </AppBar>
-    <Box display="flex" justifyContent="center">
-      <Box sx={styles.root} display="flex" flexDirection="column">
-        <Routes>
-          <Route path="/" element={<Main colourBlind={colourBlind} />} />
-          <Route path="/practice" element={<Practice colourBlind={colourBlind} />} />
-          <Route path="/leaderboard" element={<Leaderboard colourBlind={colourBlind} />} />
-        </Routes>
+      <Box display="flex" justifyContent="center">
+        <Box sx={styles.root} display="flex" flexDirection="column">
+          <Routes>
+            <Route path="/" element={<Main colourBlind={colourBlind} />} />
+            <Route path="/practice" element={<Practice colourBlind={colourBlind} />} />
+            <Route path="/leaderboard" element={<Leaderboard colourBlind={colourBlind} />} />
+          </Routes>
+        </Box>
       </Box>
-    </Box>
-</>
+    </>
   );
 }
 
