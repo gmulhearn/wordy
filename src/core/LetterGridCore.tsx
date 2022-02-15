@@ -48,6 +48,10 @@ export const gridToText = (grid: LetterBox[][], colourBlind: boolean): string =>
     return text
 }
 
+const letterCountInWord = (letter: string, word: string): number => {
+    return (word.match(new RegExp(letter, "g")) || []).length
+}
+
 export class LetterGridProcessor {
     letterPosition: { x: number, y: number } = { x: 0, y: 0 }
     currentGrid: LetterBox[][] = getEmptyGrid()
@@ -74,6 +78,28 @@ export class LetterGridProcessor {
         }
     }
 
+    refineProcessLetterRow = (row: LetterBox[]): LetterBox[] => {
+        return row.map((lb, i) => {
+            if (lb.state == LetterState.NEARLY) {
+                const numGreenInRowOfLetter = row.filter((lb2) => (
+                    lb2.letter === lb.letter && lb2.state === LetterState.CORRECT
+                )).length
+                const numPriorYellowInRowOfLetter = row.slice(0, i).filter((lb2) => (
+                    lb2.letter === lb.letter && lb2.state === LetterState.NEARLY
+                )).length
+                const numLetterInWord = letterCountInWord(lb.letter, this.correctWord)
+                if ((numGreenInRowOfLetter + numPriorYellowInRowOfLetter) >= numLetterInWord) {
+                    return {
+                        letter: lb.letter,
+                        state: LetterState.INCORRECT
+                    }
+                }
+                return lb
+            }
+            return lb
+        })
+    }
+
     processInput = (input: string): LetterBox[][] => {
         if (this.foundWord) {
             return this.currentGrid
@@ -89,9 +115,11 @@ export class LetterGridProcessor {
                 const row = this.currentGrid[this.letterPosition.y]
                 // check if valid word
                 if (allWords.includes(row.map((i) => (i.letter)).join("").toLowerCase())) {
-                    const newRow: LetterBox[] = row.map((letterBox, i) => (
-                        this.calculateLetterBoxState(i, letterBox)
-                    ))
+                    const newRow: LetterBox[] = this.refineProcessLetterRow(
+                        row.map((letterBox, i) => (
+                            this.calculateLetterBoxState(i, letterBox)
+                        ))
+                    )
                     this.letterGuesses = this.letterGuesses.concat(newRow)
                     this.setLetterGuesses(this.letterGuesses)
                     this.currentGrid[this.letterPosition.y] = newRow
