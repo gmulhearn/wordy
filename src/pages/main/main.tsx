@@ -7,6 +7,7 @@ import { Box, Button, Dialog, DialogTitle, IconButton, Typography } from '@mui/m
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { gridToText } from '../../core/LetterGridCore';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { GAME_TYPE } from '../../core/CookieCore';
 
 const getTodaysWord = (): string => {
     const randNum = randomseed.create(Date().split(" ").slice(1, 4).join("")).random()
@@ -66,7 +67,7 @@ const Main = ({ colourBlind }: { colourBlind: boolean }) => {
                 }
 
             </Box>
-            <GameBoard colourBlind={colourBlind} correctWord={todaysWord} onWordFound={onWordFound} />
+            <GameBoard colourBlind={colourBlind} gameType={GAME_TYPE.CLASSIC} correctWord={todaysWord} onWordFound={onWordFound} />
         </>
     );
 };

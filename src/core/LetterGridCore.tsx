@@ -8,7 +8,9 @@ const allWords = allowedWords.concat(words)
 const WIDTH = 5
 const HEIGHT = 6
 
-const emptyLetterBox = { letter: "", state: LetterState.NONE }
+const NO_LETTER = ""
+
+const emptyLetterBox = { letter: NO_LETTER, state: LetterState.NONE }
 
 export const emptyGrid: LetterBox[][] = [
     Array(WIDTH).fill(emptyLetterBox),
@@ -68,6 +70,32 @@ export class LetterGridProcessor {
         this.setLetterGuesses = setLetterGuesses
         this.onInvalidWord = onInvalidWord
         this.onWordFound = onWordFound
+    }
+
+    restartFromGrid = (grid: LetterBox[][]) => {
+        this.currentGrid = grid
+
+        var y = Math.min(HEIGHT,
+            grid.filter((row) =>
+                (row.filter((lb) => (lb.state != LetterState.NONE)).length > 0)
+            ).length
+        )
+        var x = y < grid.length ? grid[y].filter((lb) => (lb.letter != NO_LETTER)).length : 0
+
+        this.letterPosition = {
+            x: x,
+            y: y
+        }
+        console.log(this.letterPosition)
+
+        this.letterGuesses = grid.flatMap((row) => (
+            row.filter((lb) => 
+            (
+                lb.state !== LetterState.NONE
+            ))
+        ))
+
+        this.setLetterGuesses(this.letterGuesses)
     }
 
     calculateLetterBoxState = (index: number, letterBox: LetterBox): LetterBox => {

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import words from '../../res/5letterwords.json'
 import RefreshIcon from '@mui/icons-material/Refresh';
 import GameBoard from '../../components/GameBoard';
+import { GAME_TYPE } from '../../core/CookieCore';
 
 const getWord = (): string => {
     const word = words[Math.floor(Math.random() * words.length - 1)] || "UNDEF"
@@ -43,7 +44,7 @@ const Practice = ({ colourBlind }: { colourBlind: boolean }) => {
                 </IconButton>
 
             </Box>
-            <GameBoard colourBlind={colourBlind} correctWord={correctWord} onWordFound={onWordFound} />
+            <GameBoard colourBlind={colourBlind} gameType={GAME_TYPE.PRACTICE} correctWord={correctWord} onWordFound={onWordFound} />
         </Box>
 
     );
