@@ -21,7 +21,7 @@ const Practice = ({ colourBlind }: { colourBlind: boolean }) => {
         setCorrectWord(word)
     }, []);
 
-    const onWordFound = () => {
+    const onGameDone = () => {
         console.log("FOUND!")
     }
 
@@ -44,7 +44,7 @@ const Practice = ({ colourBlind }: { colourBlind: boolean }) => {
                 </IconButton>
 
             </Box>
-            <GameBoard colourBlind={colourBlind} gameType={GAME_TYPE.PRACTICE} correctWord={correctWord} onWordFound={onWordFound} />
+            <GameBoard colourBlind={colourBlind} gameType={GAME_TYPE.PRACTICE} correctWord={correctWord} onGameDone={onGameDone} />
         </Box>
 
     );

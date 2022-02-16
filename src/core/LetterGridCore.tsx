@@ -63,13 +63,13 @@ export class LetterGridProcessor {
     correctWord
     setLetterGuesses
     onInvalidWord
-    onWordFound
+    onGameDone
 
-    constructor(correctWord: string, setLetterGuesses: React.Dispatch<React.SetStateAction<LetterBox[]>>, onInvalidWord: () => void, onWordFound: (wordGrid: LetterBox[][]) => void) {
+    constructor(correctWord: string, setLetterGuesses: React.Dispatch<React.SetStateAction<LetterBox[]>>, onInvalidWord: () => void, onGameDone: (wordGrid: LetterBox[][]) => void) {
         this.correctWord = correctWord
         this.setLetterGuesses = setLetterGuesses
         this.onInvalidWord = onInvalidWord
-        this.onWordFound = onWordFound
+        this.onGameDone = onGameDone
     }
 
     restartFromGrid = (grid: LetterBox[][]) => {
@@ -89,13 +89,34 @@ export class LetterGridProcessor {
         console.log(this.letterPosition)
 
         this.letterGuesses = grid.flatMap((row) => (
-            row.filter((lb) => 
+            row.filter((lb) =>
             (
                 lb.state !== LetterState.NONE
             ))
         ))
 
         this.setLetterGuesses(this.letterGuesses)
+
+        if (this.checkIfGameOver()) {
+            this.foundWord = true
+            this.onGameDone(this.currentGrid)
+        }
+    }
+
+    checkIfGameOver = (): boolean => {
+        if (this.currentGrid.filter((row) => (
+            row.length === row.filter((lb) => lb.state === LetterState.CORRECT).length
+        )).length > 0) {
+            // game won
+            return true
+        }
+
+        if (this.letterPosition.y === HEIGHT) {
+            // game lost
+            return true
+        }
+
+        return false
     }
 
     calculateLetterBoxState = (index: number, letterBox: LetterBox): LetterBox => {
@@ -157,9 +178,9 @@ export class LetterGridProcessor {
                     this.letterPosition.x = 0
                     this.letterPosition.y += 1
 
-                    if (newRow.length == newRow.filter((i) => i.state == LetterState.CORRECT).length) {
+                    if (this.checkIfGameOver()) {
                         this.foundWord = true
-                        this.onWordFound(this.currentGrid)
+                        this.onGameDone(this.currentGrid)
                     }
                 } else {
                     this.onInvalidWord()

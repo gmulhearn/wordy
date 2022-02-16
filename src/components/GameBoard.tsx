@@ -20,7 +20,7 @@ const styles = {
     },
 }
 
-const GameBoard = ({ colourBlind, gameType, correctWord, onWordFound }: { colourBlind: boolean, gameType: GAME_TYPE, correctWord: string, onWordFound: (letterGrid: LetterBox[][]) => void }) => {
+const GameBoard = ({ colourBlind, gameType, correctWord, onGameDone }: { colourBlind: boolean, gameType: GAME_TYPE, correctWord: string, onGameDone: (letterGrid: LetterBox[][]) => void }) => {
 
     const [letterGrid, setLetterGrid] = useState(getEmptyGrid());
     const [letterGuesses, setLetterGuesses] = useState<LetterBox[]>([])
@@ -32,7 +32,7 @@ const GameBoard = ({ colourBlind, gameType, correctWord, onWordFound }: { colour
             correctWord,
             setLetterGuesses,
             () => { setInvalidWordSnackbarOpen(true) },
-            onWordFound
+            onGameDone
         )
     )
 

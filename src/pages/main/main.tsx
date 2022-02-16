@@ -17,22 +17,22 @@ const getTodaysWord = (): string => {
 
 const Main = ({ colourBlind }: { colourBlind: boolean }) => {
     const todaysWord = getTodaysWord()
-    const [wordFound, setWordFound] = useState(false);
-    const [winOpen, setWinOpen] = useState(false);
+    const [gameDone, setGameDone] = useState(false);
+    const [endOpen, setEndOpen] = useState(false);
     const [resultText, setResultText] = useState("bruh");
     const [resultCopied, setResultCopied] = useState(false)
-    const [winningGrid, setWinningGrid] = useState<LetterBox[][]>([[]])
+    const [endingGrid, setEndingGrid] = useState<LetterBox[][]>([[]])
 
-    const onWordFound = (wordGrid: LetterBox[][]) => {
-        setWordFound(true)
-        setWinOpen(true)
-        setWinningGrid(wordGrid)
+    const onGameDone = (wordGrid: LetterBox[][]) => {
+        setGameDone(true)
+        setEndOpen(true)
+        setEndingGrid(wordGrid)
         setResultText(gridToText(wordGrid, colourBlind))
     }
 
     useEffect(() => {
-      if (wordFound) {
-          setResultText(gridToText(winningGrid, colourBlind))
+      if (gameDone) {
+          setResultText(gridToText(endingGrid, colourBlind))
       }
     
     }, [colourBlind]);
@@ -40,11 +40,12 @@ const Main = ({ colourBlind }: { colourBlind: boolean }) => {
 
     return (
         <>
-            <Dialog open={wordFound && winOpen} onClose={() => {
-                setWinOpen(false)
+            <Dialog open={gameDone && endOpen} onClose={() => {
+                setEndOpen(false)
                 setResultCopied(false)
             }}>
-                <DialogTitle sx={{ marginInline: "3em" }}>Nice!</DialogTitle>
+                <DialogTitle sx={{ marginInline: "3em" }}>Round Over!</DialogTitle>
+                <Typography sx={{ textAlign: "center" }}>Word: {todaysWord}</Typography>
                 {resultCopied ?
                     <Typography sx={{ textAlign: "center" }}>
                         Copied to clipboard :)
@@ -59,15 +60,15 @@ const Main = ({ colourBlind }: { colourBlind: boolean }) => {
             </Dialog>
             <Box display="flex" justifyContent="center">
                 {
-                    wordFound ? (
-                        <IconButton onClick={() => {setWinOpen(true)}}>
+                    gameDone ? (
+                        <IconButton onClick={() => {setEndOpen(true)}}>
                             <VisibilityIcon />
                         </IconButton>
                     ) : <Box sx={{marginTop: "1em"}}> </Box>
                 }
 
             </Box>
-            <GameBoard colourBlind={colourBlind} gameType={GAME_TYPE.CLASSIC} correctWord={todaysWord} onWordFound={onWordFound} />
+            <GameBoard colourBlind={colourBlind} gameType={GAME_TYPE.CLASSIC} correctWord={todaysWord} onGameDone={onGameDone} />
         </>
     );
 };
