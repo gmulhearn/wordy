@@ -1,3 +1,4 @@
+import { Snackbar } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import { getEmptyGrid, LetterGridProcessor } from '../core/LetterGridCore';
@@ -23,7 +24,16 @@ const GameBoard = ({ colourBlind, correctWord, onWordFound }: { colourBlind: boo
     const [letterGrid, setLetterGrid] = useState(getEmptyGrid());
     const [letterGuesses, setLetterGuesses] = useState<LetterBox[]>([])
 
-    const [letterGridProcessor, setLetterGridProcessor] = useState(new LetterGridProcessor(correctWord, setLetterGuesses, onWordFound))
+    const [invalidWordSnackbarOpen, setInvalidWordSnackbarOpen] = useState(false);
+
+    const [letterGridProcessor, setLetterGridProcessor] = useState(
+        new LetterGridProcessor(
+            correctWord,
+            setLetterGuesses,
+            () => { setInvalidWordSnackbarOpen(true) },
+            onWordFound
+        )
+    )
 
     const handleKeyboardInput = (input: string) => {
         const newGrid = letterGridProcessor.processInput(input)
@@ -32,6 +42,13 @@ const GameBoard = ({ colourBlind, correctWord, onWordFound }: { colourBlind: boo
 
     return (
         <Box display="flex" justifyContent="space-between" flexDirection="column" alignItems="center">
+            <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={invalidWordSnackbarOpen}
+                onClose={() => {setInvalidWordSnackbarOpen(false)}}
+                autoHideDuration={750}
+                message="Invalid word"
+            />
             <Box sx={styles.main} >
                 <WordGrid letterGrid={letterGrid} colourBlind={colourBlind} />
             </Box>

@@ -38,7 +38,7 @@ export const gridToText = (grid: LetterBox[][], colourBlind: boolean): string =>
         row.map((lb) => (
             lb.state == LetterState.CORRECT ? (colourBlind ? "🟧" : "🟩") : (
                 lb.state == LetterState.NEARLY ? (colourBlind ? "🟦" : "🟨") : (
-                    lb.state == LetterState.INCORRECT ? "⬜" : ""
+                    lb.state == LetterState.INCORRECT ? "⬛" : ""
                 )
             ))).join("")
     )).join("\n")
@@ -60,11 +60,13 @@ export class LetterGridProcessor {
 
     correctWord
     setLetterGuesses
+    onInvalidWord
     onWordFound
 
-    constructor(correctWord: string, setLetterGuesses: React.Dispatch<React.SetStateAction<LetterBox[]>>, onWordFound: (wordGrid: LetterBox[][]) => void) {
+    constructor(correctWord: string, setLetterGuesses: React.Dispatch<React.SetStateAction<LetterBox[]>>, onInvalidWord: () => void, onWordFound: (wordGrid: LetterBox[][]) => void) {
         this.correctWord = correctWord
         this.setLetterGuesses = setLetterGuesses
+        this.onInvalidWord = onInvalidWord
         this.onWordFound = onWordFound
     }
 
@@ -132,7 +134,7 @@ export class LetterGridProcessor {
                         this.onWordFound(this.currentGrid)
                     }
                 } else {
-                    console.log("Invalid word")
+                    this.onInvalidWord()
                 }
             }
         } else if (input == DELETE) {
