@@ -23,7 +23,7 @@ export const setGameboardCookie = (gameType: GAME_TYPE, gameboard: LetterBox[][]
 
 export const getGameboardIfExists = (gameType: GAME_TYPE): LetterBox[][] | undefined => {
 
-    if (gameType == GAME_TYPE.CLASSIC) {
+    if (gameType === GAME_TYPE.CLASSIC) {
         if (!Cookie.get(GAME_TYPE.CLASSIC)) {
             return undefined
         }

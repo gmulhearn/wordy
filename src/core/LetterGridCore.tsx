@@ -38,9 +38,9 @@ export const gridToText = (grid: LetterBox[][], colourBlind: boolean): string =>
     let text = `Wordy\n${Date().split(" ").slice(1, 4).join(" ")}\n\n`
     text += grid.map((row) => (
         row.map((lb) => (
-            lb.state == LetterState.CORRECT ? (colourBlind ? "🟧" : "🟩") : (
-                lb.state == LetterState.NEARLY ? (colourBlind ? "🟦" : "🟨") : (
-                    lb.state == LetterState.INCORRECT ? "⬛" : ""
+            lb.state === LetterState.CORRECT ? (colourBlind ? "🟧" : "🟩") : (
+                lb.state === LetterState.NEARLY ? (colourBlind ? "🟦" : "🟨") : (
+                    lb.state === LetterState.INCORRECT ? "⬛" : ""
                 )
             ))).join("")
     )).join("\n")
@@ -52,6 +52,28 @@ export const gridToText = (grid: LetterBox[][], colourBlind: boolean): string =>
 
 const letterCountInWord = (letter: string, word: string): number => {
     return (word.match(new RegExp(letter, "g")) || []).length
+}
+
+export const checkIfGridGameOver = (grid: LetterBox[][]): boolean => {
+    var y = Math.min(HEIGHT,
+        grid.filter((row) =>
+            (row.filter((lb) => (lb.state !== LetterState.NONE)).length > 0)
+        ).length
+    )
+
+    if (grid.filter((row) => (
+        row.length === row.filter((lb) => lb.state === LetterState.CORRECT).length
+    )).length > 0) {
+        // game won
+        return true
+    }
+
+    if (y === HEIGHT) {
+        // game lost
+        return true
+    }
+
+    return false
 }
 
 export class LetterGridProcessor {
@@ -77,10 +99,10 @@ export class LetterGridProcessor {
 
         var y = Math.min(HEIGHT,
             grid.filter((row) =>
-                (row.filter((lb) => (lb.state != LetterState.NONE)).length > 0)
+                (row.filter((lb) => (lb.state !== LetterState.NONE)).length > 0)
             ).length
         )
-        var x = y < grid.length ? grid[y].filter((lb) => (lb.letter != NO_LETTER)).length : 0
+        var x = y < grid.length ? grid[y].filter((lb) => (lb.letter !== NO_LETTER)).length : 0
 
         this.letterPosition = {
             x: x,
@@ -120,7 +142,7 @@ export class LetterGridProcessor {
     }
 
     calculateLetterBoxState = (index: number, letterBox: LetterBox): LetterBox => {
-        if (this.correctWord.charAt(index) == letterBox.letter) {
+        if (this.correctWord.charAt(index) === letterBox.letter) {
             return { letter: letterBox.letter, state: LetterState.CORRECT }
         } else if (this.correctWord.includes(letterBox.letter)) {
             return { letter: letterBox.letter, state: LetterState.NEARLY }
@@ -131,7 +153,7 @@ export class LetterGridProcessor {
 
     refineProcessLetterRow = (row: LetterBox[]): LetterBox[] => {
         return row.map((lb, i) => {
-            if (lb.state == LetterState.NEARLY) {
+            if (lb.state === LetterState.NEARLY) {
                 const numGreenInRowOfLetter = row.filter((lb2) => (
                     lb2.letter === lb.letter && lb2.state === LetterState.CORRECT
                 )).length
@@ -155,13 +177,13 @@ export class LetterGridProcessor {
         if (this.foundWord) {
             return this.currentGrid
         }
-        if (this.letterPosition.x == WIDTH && input != ENTER && input != DELETE) {
+        if (this.letterPosition.x === WIDTH && input !== ENTER && input !== DELETE) {
             // err
             throw new Error("");
         }
 
-        if (input == ENTER) {
-            if (this.letterPosition.x == WIDTH) {
+        if (input === ENTER) {
+            if (this.letterPosition.x === WIDTH) {
                 // process here
                 const row = this.currentGrid[this.letterPosition.y]
                 // check if valid word
@@ -186,8 +208,8 @@ export class LetterGridProcessor {
                     this.onInvalidWord()
                 }
             }
-        } else if (input == DELETE) {
-            if (this.letterPosition.x != 0) {
+        } else if (input === DELETE) {
+            if (this.letterPosition.x !== 0) {
                 this.letterPosition.x -= 1
                 this.currentGrid[this.letterPosition.y][this.letterPosition.x] = emptyLetterBox
             }

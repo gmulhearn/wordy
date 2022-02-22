@@ -10,7 +10,7 @@ const theme = createTheme({
   },
 });
 
-export const wordleColours = {
+export const wordyColours = {
   normal: {
     correct: "#618B55",
     nearly: "#B29F4D"

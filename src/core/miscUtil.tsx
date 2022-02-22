@@ -1,8 +1,8 @@
 import { LetterState } from "../components/WordGrid"
-import { wordleColours } from "../theme"
+import { wordyColours } from "../theme"
 
 export const stateToColor = (state: LetterState, colourBlind: boolean = false): string => {
-    const colours = colourBlind ? wordleColours.colourBlind : wordleColours.normal
+    const colours = colourBlind ? wordyColours.colourBlind : wordyColours.normal
 
     switch (state) {
         case LetterState.CORRECT:

@@ -46,9 +46,9 @@ function App() {
             <Button onClick={navBattle} sx={{ minWidth: "0px" }}>
               <SportsMmaIcon />
             </Button>
-            {/* <Button onClick={navLeaderboard} sx={{ minWidth: "0px" }}>
+            <Button onClick={navLeaderboard} sx={{ minWidth: "0px" }}>
               <LeaderboardIcon />
-            </Button> */}
+            </Button>
             <Switch size="small" onChange={() => { setColourBlind(!colourBlind) }} />
           </Box>
         </Toolbar>

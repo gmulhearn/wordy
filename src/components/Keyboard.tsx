@@ -29,8 +29,8 @@ const Keyboard = ({ onKeyboardInput, letterStates, colourBlind }: { onKeyboardIn
 
     const keyPressListener = useCallback((event: KeyboardEvent) => {
         let letter =
-            event.key == "Backspace" ? DELETE
-                : (event.key == "Enter" ? ENTER
+            event.key === "Backspace" ? DELETE
+                : (event.key === "Enter" ? ENTER
                     : event.key.toUpperCase())
 
         if (VALID_INPUT.includes(letter)) {
@@ -51,13 +51,13 @@ const Keyboard = ({ onKeyboardInput, letterStates, colourBlind }: { onKeyboardIn
         
         let bg = "#7b7d7c"
         
-        const letterMatches = letterStates.filter((l: LetterBox) => (l.letter == letter))
+        const letterMatches = letterStates.filter((l: LetterBox) => (l.letter === letter))
         if (letterMatches.length > 0) {
-            if (letterMatches.filter((l: LetterBox) => (l.state == LetterState.CORRECT)).length > 0) {
+            if (letterMatches.filter((l: LetterBox) => (l.state === LetterState.CORRECT)).length > 0) {
                 bg = stateToColor(LetterState.CORRECT, colourBlind)
-            } else if (letterMatches.filter((l: LetterBox) => (l.state == LetterState.NEARLY)).length > 0) {
+            } else if (letterMatches.filter((l: LetterBox) => (l.state === LetterState.NEARLY)).length > 0) {
                 bg = stateToColor(LetterState.NEARLY, colourBlind)
-            } else if (letterMatches.filter((l: LetterBox) => (l.state == LetterState.INCORRECT)).length > 0) {
+            } else if (letterMatches.filter((l: LetterBox) => (l.state === LetterState.INCORRECT)).length > 0) {
                 bg = stateToColor(LetterState.INCORRECT, colourBlind)
             }
         }
