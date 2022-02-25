@@ -34,8 +34,12 @@ const cloneMatrix = (matrix: any[][]): any[][] => {
     });
 }
 
+export const getDayString = (): string => {
+    return Date().split(" ").slice(1, 4).join(" ")
+}
+
 export const gridToText = (grid: LetterBox[][], colourBlind: boolean): string => {
-    let text = `Wordy\n${Date().split(" ").slice(1, 4).join(" ")}\n\n`
+    let text = `Wordy\n${getDayString()}\n\n`
     text += grid.map((row) => (
         row.map((lb) => (
             lb.state === LetterState.CORRECT ? (colourBlind ? "🟧" : "🟩") : (
@@ -74,6 +78,20 @@ export const checkIfGridGameOver = (grid: LetterBox[][]): boolean => {
     }
 
     return false
+}
+
+export const getBoardScore = (grid: LetterBox[][]): number | undefined => {
+    if (!checkIfGridGameOver(grid)) {
+        return undefined
+    }
+
+    var score = 0
+    grid.forEach((row) => {
+        if (row.length !== row.filter((lb) => lb.state === LetterState.NONE).length) {
+            score += 1
+        }
+    })
+    return score
 }
 
 export class LetterGridProcessor {

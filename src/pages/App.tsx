@@ -12,7 +12,8 @@ import Battle from './battle/Battle';
 
 const styles = {
   root: {
-    width: "400px",
+    maxWidth: "50em"
+    // width: "500px",
     // minHeight: "85vh",
     // border: 1
   },
@@ -46,9 +47,9 @@ function App() {
             <Button onClick={navBattle} sx={{ minWidth: "0px" }}>
               <SportsMmaIcon />
             </Button>
-            <Button onClick={navLeaderboard} sx={{ minWidth: "0px" }}>
+            {/* <Button onClick={navLeaderboard} sx={{ minWidth: "0px" }}>
               <LeaderboardIcon />
-            </Button>
+            </Button> */}
             <Switch size="small" onChange={() => { setColourBlind(!colourBlind) }} />
           </Box>
         </Toolbar>

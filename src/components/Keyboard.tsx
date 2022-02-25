@@ -66,7 +66,7 @@ const Keyboard = ({ onKeyboardInput, letterStates, colourBlind }: { onKeyboardIn
     }
 
 
-    return (<Box display="flex" sx={{ minWidth: "100%" }} justifyContent="center" flexDirection="column" alignItems="center">
+    return (<Box display="flex" justifyContent="center" flexDirection="column" alignItems="center">
         <Box display="flex" sx={{ minWidth: "100%" }}>
             {topRowLetters.map((letter) =>
                 <Button sx={getLetterStyle(letter)}

@@ -1,29 +1,36 @@
-import { Button, Dialog, DialogTitle, Snackbar, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, Snackbar, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useCallback, useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
-import 'firebase/firestore'
+import { collection, getFirestore, addDoc, doc, setDoc, getDocs, query, onSnapshot, Unsubscribe, getDoc } from 'firebase/firestore'
 import { getAuth, GoogleAuthProvider, EmailAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { firebaseConfig } from '../../config/firebase';
 import GoogleIcon from '@mui/icons-material/Google';
 import MailIcon from '@mui/icons-material/Mail';
 import { GAME_TYPE, getGameboardIfExists } from '../../core/CookieCore';
-import { checkIfGridGameOver } from '../../core/LetterGridCore';
+import { checkIfGridGameOver, getBoardScore, getDayString } from '../../core/LetterGridCore';
 import { useNavigate } from 'react-router';
 import { EmailSignInOrUpDialog } from './EmailSignInOrUpDialog';
-
-const styles = {
-    root: {
-        width: "400px",
-        // minHeight: "85vh",
-        // border: 1
-    },
-};
+import AddIcon from '@mui/icons-material/Add';
+import Groups from './Groups';
+import LeaderboardEntry, { LeaderboardUserData } from './LeaderboardEntry';
+import { LetterBox } from '../../components/WordGrid';
 
 const firebaseApp = initializeApp(firebaseConfig)
 
 const auth = getAuth(firebaseApp)
+
+const firestore = getFirestore(firebaseApp)
+
+const styles = {
+    root: {
+        width: "100%",
+        maxWidth: "50em",
+        margin: "1em",
+        border: 1
+    }
+}
 
 const Leaderboard = ({ colourBlind }: { colourBlind: boolean }) => {
 
@@ -38,12 +45,42 @@ const Leaderboard = ({ colourBlind }: { colourBlind: boolean }) => {
     const [showDisplayNamePrompt, setShowDisplayNamePrompt] = useState(false);
     const [displayNameField, setDisplayNameField] = useState("")
 
+    const [groups, setGroups] = useState<string[]>([]);
+
+    const [userResults, setUserResults] = useState<LeaderboardUserData[]>([])
+
     const [showError, setShowError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("error");
 
+    let groupsUnsub: Unsubscribe | undefined = undefined;
+
     useEffect(() => {
         checkAndPromptForDisplayName()
+
+        if (user?.displayName) {
+            groupsUnsub = onSnapshot(query(collection(firestore, "userGroups", user?.uid, "groups")), (snapshot) => {
+                console.log("updated groups")
+                setGroups(snapshot.docs.map((doc) => (doc.id)))
+            })
+        }
+
+        return () => {
+            if (groupsUnsub) {
+                groupsUnsub()
+            }
+        };
+
     }, [user]);
+
+    useEffect(() => {
+
+        return () => {
+            if (groupsUnsub) {
+                groupsUnsub()
+            }
+        };
+    }, []);
+
 
 
     const signInWithGoogle = () => {
@@ -106,10 +143,50 @@ const Leaderboard = ({ colourBlind }: { colourBlind: boolean }) => {
         }
 
         // magic here
+        setDoc(doc(firestore, "userResults", auth.currentUser!!.uid, "results", getDayString()), {
+            boardJSON: JSON.stringify(board),
+            score: getBoardScore(board)
+        })
+    }
+
+    const handleGroupChange = async (groupName: string) => {
+        console.log("changing group: " + groupName)
+        const groupUsersSnap = await getDocs(collection(firestore, "groupUsers", groupName, "users"))
+
+        const userResults: (LeaderboardUserData | undefined)[] = await Promise.all(groupUsersSnap.docs.map(async (groupUsersDoc) => {
+            const username = groupUsersDoc.data().displayName
+            const userId = groupUsersDoc.id
+            const userResultDoc = await getDoc(doc(firestore, "userResults", userId, "results", getDayString()))
+            const userScore = userResultDoc.data()?.score
+            const userBoard = userResultDoc.data()?.boardJSON
+
+            if (!userScore || !userBoard) {
+                return undefined
+            }
+
+            return {
+                displayName: username,
+                score: userScore,
+                board: JSON.parse(userBoard) as LetterBox[][]
+            }
+        }))
+
+        const filteredResults: LeaderboardUserData[] = userResults.filter((result) => (result != undefined)) as LeaderboardUserData[]
+
+        setUserResults(filteredResults)
+    }
+
+    const handleAddGroup = (groupName: string) => {
+        console.log("joining: " + groupName)
+        setDoc(doc(firestore, "groupUsers", groupName, "users", auth.currentUser!!.uid), {
+            displayName: user?.displayName
+        })
+
+        setDoc(doc(firestore, "userGroups", auth.currentUser!!.uid, "groups", groupName), {})
     }
 
     return (
-        <Box display="flex" alignItems="center" flexDirection="column">
+        <Box display="flex" alignItems="center" flexDirection="column" sx={styles.root}>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={showError}
@@ -159,9 +236,12 @@ const Leaderboard = ({ colourBlind }: { colourBlind: boolean }) => {
             </Typography>
 
             {user ? (
-                <Box display="flex" flexDirection="column" marginTop="2em">
-                    <Box display="flex" alignItems="center">
-                        {auth.currentUser?.displayName}
+                <Box display="flex" flexDirection="column" marginTop="2em" sx={{ minWidth: "100%", flexGrow: 1 }}>
+                    <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ border: 1, minWidth: "100%", flexGrow: 1 }} >
+                        <Typography sx={{ flowGrow: 1, border: 1}}>
+                            {auth.currentUser?.displayName}
+
+                        </Typography>
                         <Button
                             onClick={() => signOut(auth)}
                         >
@@ -171,7 +251,11 @@ const Leaderboard = ({ colourBlind }: { colourBlind: boolean }) => {
                     <Button onClick={uploadYourResult}>
                         Upload your result
                     </Button>
+                    <Groups groupNames={groups} selectGroup={handleGroupChange} addGroup={handleAddGroup} />
                     Leaderboard go here!
+                    {userResults.map((userData) => (
+                        <LeaderboardEntry entryData={userData} />
+                    ))}
                 </Box>
             ) : (
                 <Box display="flex" flexDirection="column" marginTop="2em">
