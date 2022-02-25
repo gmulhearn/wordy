@@ -5,7 +5,7 @@ import GameBoard from '../../components/GameBoard';
 import { LetterBox } from '../../components/WordGrid';
 import { Box, Button, Dialog, DialogTitle, IconButton, Typography } from '@mui/material';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { gridToText } from '../../core/LetterGridCore';
+import { gridToTextMain } from '../../core/LetterGridCore';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { GAME_TYPE } from '../../core/CookieCore';
 
@@ -27,12 +27,12 @@ const Main = ({ colourBlind }: { colourBlind: boolean }) => {
         setGameDone(true)
         setEndOpen(true)
         setEndingGrid(wordGrid)
-        setResultText(gridToText(wordGrid, colourBlind))
+        setResultText(gridToTextMain(wordGrid, colourBlind))
     }
 
     useEffect(() => {
       if (gameDone) {
-          setResultText(gridToText(endingGrid, colourBlind))
+          setResultText(gridToTextMain(endingGrid, colourBlind))
       }
     
     }, [colourBlind]);
@@ -44,7 +44,7 @@ const Main = ({ colourBlind }: { colourBlind: boolean }) => {
                 setEndOpen(false)
                 setResultCopied(false)
             }}>
-                <DialogTitle sx={{ marginInline: "3em" }}>Round Over!</DialogTitle>
+                <DialogTitle sx={{ marginInline: "3em", textAlign: "center" }}>Round Over!</DialogTitle>
                 <Typography sx={{ textAlign: "center" }}>Word: {todaysWord}</Typography>
                 {resultCopied ?
                     <Typography sx={{ textAlign: "center" }}>

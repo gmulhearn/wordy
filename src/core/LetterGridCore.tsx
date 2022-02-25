@@ -38,20 +38,31 @@ export const getDayString = (): string => {
     return Date().split(" ").slice(1, 4).join(" ")
 }
 
-export const gridToText = (grid: LetterBox[][], colourBlind: boolean): string => {
+export const gridToTextMain = (grid: LetterBox[][], colourBlind: boolean): string => {
     let text = `Wordy\n${getDayString()}\n\n`
-    text += grid.map((row) => (
+    text += gridToText(grid, colourBlind)
+    text += `\nPlay me at: ${window.location.toString()}`
+    return text
+}
+
+export const gridToTextBattle = (grid: LetterBox[][], colourBlind: boolean, time: number, seed: string): string => {
+    let text = `Wordy Battle\n#${seed.substring(0, 6)}\n`
+    text += gridToText(grid, colourBlind)
+    text += `\nTime: ${time}s`
+    text += `\nBattle me at: ${window.location.toString()}`
+
+    return text
+}
+
+const gridToText = (grid: LetterBox[][], colourBlind: boolean): string => {
+    return grid.map((row) => (
         row.map((lb) => (
             lb.state === LetterState.CORRECT ? (colourBlind ? "🟧" : "🟩") : (
                 lb.state === LetterState.NEARLY ? (colourBlind ? "🟦" : "🟨") : (
                     lb.state === LetterState.INCORRECT ? "⬛" : ""
                 )
             ))).join("")
-    )).join("\n")
-
-    text += `Play me at: ${window.location.toString()}`
-
-    return text
+    )).filter((rowText) => rowText != "").join("\n")
 }
 
 const letterCountInWord = (letter: string, word: string): number => {

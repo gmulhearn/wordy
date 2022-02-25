@@ -1,5 +1,5 @@
 import { Box, Button, Dialog, DialogTitle, IconButton, Snackbar, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import words from '../../res/5letterwords.json'
 import randomseed from 'random-seed'
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -9,7 +9,7 @@ import { useSearchParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { LetterBox } from '../../components/WordGrid';
-import { gridToText } from '../../core/LetterGridCore';
+import { gridToTextBattle } from '../../core/LetterGridCore';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
@@ -23,6 +23,11 @@ const Battle = ({ colourBlind }: { colourBlind: boolean }) => {
 
     const [linkCopied, setLinkCopied] = useState(false);
 
+    const [helperDialogOpen, setHelperDialogOpen] = useState(true)
+
+    const [timer, setTimer] = useState(0)
+    const countRef = useRef<NodeJS.Timer | null>(null)
+
     const [gameDone, setGameDone] = useState(false);
     const [endOpen, setEndOpen] = useState(false);
     const [resultText, setResultText] = useState("bruh");
@@ -33,7 +38,6 @@ const Battle = ({ colourBlind }: { colourBlind: boolean }) => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-
     }, []);
 
     useEffect(() => {
@@ -45,16 +49,35 @@ const Battle = ({ colourBlind }: { colourBlind: boolean }) => {
         }
     }, [searchParams]);
 
+    useEffect(() => {
+        if (gameDone) {
+            if (countRef.current) {
+                clearInterval(countRef.current)
+            }
+        }
+    }, [gameDone]);
+
     const onGameDone = (wordGrid: LetterBox[][]) => {
         setGameDone(true)
         setEndOpen(true)
         setEndingGrid(wordGrid)
-        setResultText(gridToText(wordGrid, colourBlind))
+        setTimer(currTimer => {
+            setResultText(gridToTextBattle(wordGrid, colourBlind, currTimer, searchParams.get("seed") !== null ? searchParams.get("seed")!! : ""))
+            return currTimer
+        })
     }
 
     const refreshWithNewSeed = () => {
         setSearchParams({ seed: uuidv4() })
         window.location.reload()
+    }
+
+    const startBattle = () => {
+        setHelperDialogOpen(false)
+
+        countRef.current = setInterval(() => {
+            setTimer((timer) => timer + 1)
+        }, 1000)
     }
 
     return (
@@ -70,7 +93,7 @@ const Battle = ({ colourBlind }: { colourBlind: boolean }) => {
                 setEndOpen(false)
                 setResultCopied(false)
             }}>
-                <DialogTitle sx={{ marginInline: "3em" }}>Round Over!</DialogTitle>
+                <DialogTitle sx={{ marginInline: "3em", textAlign: "center" }}>Round Over!</DialogTitle>
                 <Typography sx={{ textAlign: "center" }}>Word: {correctWord}</Typography>
                 {resultCopied ?
                     <Typography sx={{ textAlign: "center" }}>
@@ -84,15 +107,30 @@ const Battle = ({ colourBlind }: { colourBlind: boolean }) => {
                 </CopyToClipboard>
 
             </Dialog>
+            <Dialog open={helperDialogOpen}>
+                <DialogTitle sx={{ marginInline: "0em", textAlign: "center" }}>Welcome to Battle Mode</DialogTitle>
+                <Typography sx={{ margin: "0.5em", maxWidth: "25em", textAlign: "center" }}>
+                    For each battle you will be given a unique word and a unique link which you can share with friends to battle against!
+                    <br></br>
+                    Your battle will be timed, so only start when you're ready!
+                </Typography>
+                <CopyToClipboard text={window.location.toString()} onCopy={() => { setLinkCopied(true) }}>
+                    <Button variant="contained" sx={{ margin: "0.5em" }} color="secondary" >
+                        Share Battle Link
+                    </Button>
+                </CopyToClipboard>
+                <Button variant="contained" sx={{ margin: "0.5em" }} onClick={startBattle} >
+                    Battle!
+                </Button>
+            </Dialog>
             <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row" sx={{ fontWeight: "bold" }}>
                 <Typography variant="h5" sx={{ marginRight: "1em" }} >
                     Battle
                 </Typography>
-                <CopyToClipboard text={window.location.toString()} onCopy={() => { setLinkCopied(true) }}>
-                    <Button variant="outlined" >
-                        Invite
-                    </Button>
-                </CopyToClipboard>
+
+                <Typography>
+                    {timer}s
+                </Typography>
 
                 <IconButton sx={{ marginLeft: "0.2em" }} onClick={refreshWithNewSeed}>
                     <RefreshIcon color="primary" />
@@ -100,14 +138,14 @@ const Battle = ({ colourBlind }: { colourBlind: boolean }) => {
 
                 {
                     gameDone ? (
-                        <IconButton onClick={() => {setEndOpen(true)}}>
+                        <IconButton onClick={() => { setEndOpen(true) }}>
                             <VisibilityIcon color="primary" />
                         </IconButton>
                     ) : <></>
                 }
 
             </Box>
-            {correctWord ? (
+            {correctWord && (!helperDialogOpen) ? (
                 <GameBoard colourBlind={colourBlind} gameType={GAME_TYPE.PRACTICE} correctWord={correctWord} onGameDone={onGameDone} />
             ) : <></>}
         </Box>
