@@ -114,7 +114,7 @@ const Battle = ({ colourBlind }: { colourBlind: boolean }) => {
                     <br></br>
                     Your battle will be timed, so only start when you're ready!
                 </Typography>
-                <CopyToClipboard text={window.location.toString()} onCopy={() => { setLinkCopied(true) }}>
+                <CopyToClipboard text={"I'm challenge you to a Wordy Battle!\n\nPlay me: " + window.location.toString()} onCopy={() => { setLinkCopied(true) }}>
                     <Button variant="contained" sx={{ margin: "0.5em" }} color="secondary" >
                         Share Battle Link
                     </Button>
